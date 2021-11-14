@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "tutorial-pybr"
+version = "0.1.0"
+description = ""
+authors = ["Guilherme Macena <macenaguilherme1@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.7"
+fastapi = "^0.70.0"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
