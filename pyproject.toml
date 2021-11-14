@@ -10,7 +10,16 @@ fastapi = "^0.70.0"
 httpx = "^0.20.0"
 
 [tool.poetry.dev-dependencies]
+isort = "^5.10.1"
+flake8 = "^4.0.1"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.isort]
+profile = "black"
+line_length = 79
+
+[tool.black]
+line_length = 79

@@ -1,12 +1,15 @@
-
-from http import HTTPStatus
 import os
+from http import HTTPStatus
 from typing import List
 from uuid import UUID
-from api_pedidos.esquema import Item
-from api_pedidos.excecao import PedidoNaoEncontradoError, FalhaDeComunicacaoError
 
 import httpx
+
+from api_pedidos.esquema import Item
+from api_pedidos.excecao import (
+    FalhaDeComunicacaoError,
+    PedidoNaoEncontradoError,
+)
 
 # tenant e apikey fixos somente para demonstrações
 APIKEY = os.environ.get("APIKEY", "5734143a-595d-405d-9c97-6c198537108f")
@@ -16,10 +19,11 @@ MAESTRO_SERVICE_URL = f"{MAGALU_API_URL}/maestro/v1"
 
 
 def _recuperar_itens_por_pacote(uuid_do_pedido, uuid_do_pacote):
-    response = httpx.get(f"{MAESTRO_SERVICE_URL}/orders/{uuid_do_pedido}/packges/{uuid_do_pacote}/items",
-                         )
+    response = httpx.get(
+        f"{MAESTRO_SERVICE_URL}/orders/{uuid_do_pedido}/packges/{uuid_do_pacote}/items",
+    )
     response.raise_for_status()
-    return[
+    return [
         Item(
             sku=item["product"]["code"],
             # campos que utilizam a função get são opcionais
@@ -27,7 +31,6 @@ def _recuperar_itens_por_pacote(uuid_do_pedido, uuid_do_pacote):
             image_url=item["product"].get("image_url", ""),
             reference=item["product"].get("reference", ""),
             quantity=item["quantity"],
-
         )
         for item in response.json()
     ]
@@ -35,14 +38,19 @@ def _recuperar_itens_por_pacote(uuid_do_pedido, uuid_do_pacote):
 
 def recuperar_itens_por_pedido(identificacao_do_pedido: UUID) -> List[Item]:
     try:
-        response = httpx.get(f"{MAESTRO_SERVICE_URL}/orders/{identificacao_do_pedido}",
-                             headers={"X-Api-Key": APIKEY, "X-Tenant-Id": TENANT_ID},)
+        response = httpx.get(
+            f"{MAESTRO_SERVICE_URL}/orders/{identificacao_do_pedido}",
+            headers={"X-Api-Key": APIKEY, "X-Tenant-Id": TENANT_ID},
+        )
         response.raise_for_status()
         pacotes = response.json()["packges"]
         itens = []
         for pacote in pacotes:
-            itens.extend(_recuperar_itens_por_pacote(
-                identificacao_do_pedido, pacote["uuid"]))
+            itens.extend(
+                _recuperar_itens_por_pacote(
+                    identificacao_do_pedido, pacote["uuid"]
+                )
+            )
             return itens
     except httpx.HTTPStatusError as exc:
         # aqui poderiam ser tratados outros erros como, autenticação por exemplo
