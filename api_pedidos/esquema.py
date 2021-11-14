@@ -7,3 +7,11 @@ class Item(BaseModel):
     image_url: str
     regerernce: str
     quantity: int
+
+
+class HealthCheckResponse(BaseModel):
+    status: str
+
+
+class ErroResponse(BaseModel):
+    message: str
