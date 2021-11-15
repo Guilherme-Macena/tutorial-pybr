@@ -3,7 +3,6 @@ from typing import List
 from uuid import UUID
 
 import pytest
-from fastapi import responses
 from fastapi.testclient import TestClient
 
 from api_pedidos.api import app, recuperar_itens_por_pedido
@@ -51,9 +50,8 @@ class TestHealthCheck:
 
 
 class TestListarPedidos:
-    def test_quando_indentificacao_do_pedido_invalido_um_erro_deve_ser_retornado(
-        self, cliente
-    ):
+    def test_quando_indentificacao_do_pedido_invalido_retorna_um_erro(
+            self, cliente):
         resposta = cliente.get("/orders/valor-invalido/items")
         assert resposta.status_code == HTTPStatus.UNPROCESSABLE_ENTITY
 

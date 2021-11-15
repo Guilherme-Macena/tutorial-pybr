@@ -1,14 +1,11 @@
 import os
 from http import HTTPStatus
-from typing import ItemsView, List
+from typing import List
 from uuid import UUID
 
 import httpx
 from fastapi import Depends, FastAPI, Request
 from fastapi.responses import JSONResponse
-from starlette.responses import HTMLResponse
-from starlette.status import HTTP_100_CONTINUE
-
 from api_pedidos.esquema import ErroResponse, HealthCheckResponse, Item
 from api_pedidos.excecao import (
     FalhaDeComunicacaoError,
@@ -31,7 +28,8 @@ MAESTRO_SERVICE_URL = f"{MAGALU_API_URL}/maestro/v1"
 
 def _recuperar_itens_por_pacote(uuid_do_pedido, uuid_do_pacote):
     response = httpx.get(
-        f"{MAESTRO_SERVICE_URL}/orders/{uuid_do_pedido}/packges/{uuid_do_pacote}/items",
+        f"{MAESTRO_SERVICE_URL}/orders/{uuid_do_pedido} \
+        /packges/{uuid_do_pacote}/items",
     )
     response.raise_for_status()
     return [
@@ -41,10 +39,8 @@ def _recuperar_itens_por_pacote(uuid_do_pedido, uuid_do_pacote):
             description=item["product"].get("description", ""),
             image_url=item["product"].get("image_url", ""),
             reference=item["product"].get("reference", ""),
-            quantity=item["quantity"],
-        )
-        for item in response.json()
-    ]
+            quantity=item["quantity"],)
+        for item in response.json()]
 
 
 def recuperar_itens_por_pedido(identificacao_do_pedido: UUID) -> List[Item]:
@@ -64,7 +60,8 @@ def recuperar_itens_por_pedido(identificacao_do_pedido: UUID) -> List[Item]:
             )
             return itens
     except httpx.HTTPStatusError as exc:
-        # aqui poderiam ser tratados outros erros como, autenticação por exemplo
+        # aqui poderiam ser tratados outros erros como:
+        #  autenticação por exemplo
         if exc.response.status_code == HTTPStatus.NOT_FOUND:
             raise PedidoNaoEncontradoError() from exc
         raise exc

@@ -20,7 +20,8 @@ MAESTRO_SERVICE_URL = f"{MAGALU_API_URL}/maestro/v1"
 
 def _recuperar_itens_por_pacote(uuid_do_pedido, uuid_do_pacote):
     response = httpx.get(
-        f"{MAESTRO_SERVICE_URL}/orders/{uuid_do_pedido}/packges/{uuid_do_pacote}/items",
+        f"{MAESTRO_SERVICE_URL}/orders/{uuid_do_pedido}/packges \
+        /{uuid_do_pacote}/items",
     )
     response.raise_for_status()
     return [
@@ -53,7 +54,8 @@ def recuperar_itens_por_pedido(identificacao_do_pedido: UUID) -> List[Item]:
             )
             return itens
     except httpx.HTTPStatusError as exc:
-        # aqui poderiam ser tratados outros erros como, autenticação por exemplo
+        # aqui poderiam ser tratados outros erros como:
+        # autenticação por exemplo
         if exc.response.status_code == HTTPStatus.NOT_FOUND:
             raise PedidoNaoEncontradoError() from exc
         raise exc
