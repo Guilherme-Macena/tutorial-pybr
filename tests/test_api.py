@@ -57,20 +57,28 @@ class TestListarPedidos:
         resposta = cliente.get("/orders/valor-invalido/items")
         assert resposta.status_code == HTTPStatus.UNPROCESSABLE_ENTITY
 
-    def test_quando_pedido_nao_encontrado_um_erro_deve_ser_retornado(self, cliente):
+    def test_quando_pedido_nao_encontrado_um_erro_deve_ser_retornado(
+        self, cliente
+    ):
         def duble(indentificacao_do_pedido: UUID) -> List[Item]:
             raise PedidoNaoEncontradoError()
 
         app.dependency_overrides[recuperar_itens_por_pedido] = duble
-        resposta = cliente.get("/orders/7e290683-d67b-4f96-a940-44bef1f69d21/items")
+        resposta = cliente.get(
+            "/orders/7e290683-d67b-4f96-a940-44bef1f69d21/items"
+        )
         assert resposta.status_code == HTTPStatus.NOT_FOUND
 
-    def test_quando_encontrar_pedido_codigo_ok_deve_ser_retornado(self, cliente):
+    def test_quando_encontrar_pedido_codigo_ok_deve_ser_retornado(
+        self, cliente
+    ):
         def duble(indentificacao_do_pedido: UUID) -> List[Item]:
             return []
 
         app.dependency_overrides[recuperar_itens_por_pedido] = duble
-        resposta = cliente.get("/orders/7e290683-d67b-4f96-a940-44bef1f69d21/items")
+        resposta = cliente.get(
+            "/orders/7e290683-d67b-4f96-a940-44bef1f69d21/items"
+        )
         assert resposta.status_code == HTTPStatus.OK
 
     def test_quando_encontrar_pedido_deve_retornar_itens(self, cliente):
@@ -95,12 +103,16 @@ class TestListarPedidos:
             return itens
 
         app.dependency_overrides[recuperar_itens_por_pedido] = duble
-        resposta = cliente.get("/orders/7e290683-d67b-4f96-a940-44bef1f69d21/items")
+        resposta = cliente.get(
+            "/orders/7e290683-d67b-4f96-a940-44bef1f69d21/items"
+        )
         assert resposta.json == itens
 
     def test_quando_fonte_de_pedido_falha_um_erro_deve_ser_retornado(
         self, cliente, sobreescreve_recuperar_itens_por_pedido
     ):
         sobreescreve_recuperar_itens_por_pedido(FalhaDeComunicacaoError())
-        resposta = cliente.get("/orders/ea78b59b-885d-4e7b-9cd0-d54acadb4933/items")
+        resposta = cliente.get(
+            "/orders/ea78b59b-885d-4e7b-9cd0-d54acadb4933/items"
+        )
         assert resposta.status_code == HTTPStatus.BAD_GATEWAY

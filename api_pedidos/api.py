@@ -58,7 +58,9 @@ def recuperar_itens_por_pedido(identificacao_do_pedido: UUID) -> List[Item]:
         itens = []
         for pacote in pacotes:
             itens.extend(
-                _recuperar_itens_por_pacote(identificacao_do_pedido, pacote["uuid"])
+                _recuperar_itens_por_pacote(
+                    identificacao_do_pedido, pacote["uuid"]
+                )
             )
             return itens
     except httpx.HTTPStatusError as exc:
@@ -76,7 +78,9 @@ def read_root():
 
 
 @app.exception_handler(FalhaDeComunicacaoError)
-def tratar_erro_falha_de_comunicacao(request: Request, exc: FalhaDeComunicacaoError):
+def tratar_erro_falha_de_comunicacao(
+    request: Request, exc: FalhaDeComunicacaoError
+):
     return JSONResponse(
         status_code=HTTPStatus.BAD_GATEWAY,
         content={"message": "Falha de comunicação com o servidor remoto"},
@@ -84,7 +88,9 @@ def tratar_erro_falha_de_comunicacao(request: Request, exc: FalhaDeComunicacaoEr
 
 
 @app.exception_handler(PedidoNaoEncontradoError)
-def tratar_erro_pedido_nao_encontrado(request: Request, exc: PedidoNaoEncontradoError):
+def tratar_erro_pedido_nao_encontrado(
+    request: Request, exc: PedidoNaoEncontradoError
+):
     return JSONResponse(
         status_code=HTTPStatus.NOT_FOUND,
         content={"message": "Pedido não encontrado"},
