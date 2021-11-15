@@ -6,6 +6,7 @@ from uuid import UUID
 import httpx
 from fastapi import Depends, FastAPI, Request
 from fastapi.responses import JSONResponse
+
 from api_pedidos.esquema import ErroResponse, HealthCheckResponse, Item
 from api_pedidos.excecao import (
     FalhaDeComunicacaoError,
@@ -13,7 +14,6 @@ from api_pedidos.excecao import (
 )
 
 app = FastAPI()
-
 
 # def recuperar_itens_por_pedido(identificacao_do_pedido: UUID) -> List[Item]:
 # pass
