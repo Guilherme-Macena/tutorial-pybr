@@ -47,9 +47,7 @@ def recuperar_itens_por_pedido(identificacao_do_pedido: UUID) -> List[Item]:
         itens = []
         for pacote in pacotes:
             itens.extend(
-                _recuperar_itens_por_pacote(
-                    identificacao_do_pedido, pacote["uuid"]
-                )
+                _recuperar_itens_por_pacote(identificacao_do_pedido, pacote["uuid"])
             )
             return itens
     except httpx.HTTPStatusError as exc:
