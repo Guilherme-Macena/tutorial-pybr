@@ -51,7 +51,8 @@ class TestHealthCheck:
 
 class TestListarPedidos:
     def test_quando_indentificacao_do_pedido_invalido_retorna_um_erro(
-            self, cliente):
+        self, cliente
+    ):
         resposta = cliente.get("/orders/valor-invalido/items")
         assert resposta.status_code == HTTPStatus.UNPROCESSABLE_ENTITY
 

@@ -39,8 +39,10 @@ def _recuperar_itens_por_pacote(uuid_do_pedido, uuid_do_pacote):
             description=item["product"].get("description", ""),
             image_url=item["product"].get("image_url", ""),
             reference=item["product"].get("reference", ""),
-            quantity=item["quantity"],)
-        for item in response.json()]
+            quantity=item["quantity"],
+        )
+        for item in response.json()
+    ]
 
 
 def recuperar_itens_por_pedido(identificacao_do_pedido: UUID) -> List[Item]:
