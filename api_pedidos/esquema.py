@@ -5,7 +5,7 @@ class Item(BaseModel):
     sku: str
     description: str
     image_url: str
-    regerernce: str
+    reference: str
     quantity: int
 
 
