@@ -13,16 +13,14 @@ from starlette.responses import PlainTextResponse
 DATA_DIR = Path(os.path.dirname(__file__)) / "data"
 FAIL_RATE = int(os.getenv("FAIL_RATE", 0))
 
-
+chave = "5734143a-595d-405d-9c97-6c198537108f"
+tenand_id = "21fea73c-e244-497a-8540-be0d3c583596"
 app = FastAPI()
 
 
 @app.middleware("http")
 async def validate_x_tenant_id(request, call_next):
-    if (
-        request.headers.get("X-Tenant-ID")
-        != "21fea73c-e244-497a-8540-be0d3c583596"
-    ):
+    if request.headers.get("X-Tenant-ID") != tenand_id:
         return JSONResponse(
             status_code=status.HTTP_403_FORBIDDEN,
             content={"message": "Tenant ID not on tenants list"},
@@ -32,10 +30,7 @@ async def validate_x_tenant_id(request, call_next):
 
 @app.middleware("http")
 async def validate_apikey(request, call_next):
-    if (
-        request.headers.get("X-API-KEY")
-        != "5734143a-595d-405d-9c97-6c198537108f"
-    ):
+    if request.headers.get("X-API-KEY") != chave:
         return PlainTextResponse(
             status_code=status.HTTP_403_FORBIDDEN, content="Unauthorized"
         )

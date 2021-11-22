@@ -49,7 +49,7 @@ def recuperar_itens_por_pedido(identificacao_do_pedido: UUID) -> List[Item]:
     try:
         response = httpx.get(
             f"{MAESTRO_SERVICE_URL}/orders/{identificacao_do_pedido}",
-            headers={"X-Api-KEY": APIKEY, "X-Tenant-ID": TENANT_ID},
+            headers={"X-API-KEY": APIKEY, "X-Tenant-ID": TENANT_ID},
         )
         response.raise_for_status()
         pacotes = response.json()["packages"]
